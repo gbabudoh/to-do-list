@@ -5,13 +5,32 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "electron . --dev"
+    "dev": "electron . --dev",
+    "dist": "electron-builder"
   },
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.5.0"
+  },
   "devDependencies": {
     "@electron/rebuild": "^4.2.1",
-    "better-sqlite3": "^11.5.0",
-    "electron": "^31.0.0"
+    "electron": "^31.0.0",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.egobas.taskmanager",
+    "productName": "Egobas Task Manager",
+    "directories": {
+      "output": "../egobas-dist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "asarUnpack": [
+      "**/node_modules/better-sqlite3/**"
+    ]
   }
 }

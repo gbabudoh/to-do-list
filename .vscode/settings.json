@@ -1,0 +1,10 @@
+{
+  "files.watcherExclude": {
+    "**/dist/**": true,
+    "**/*.asar": true
+  },
+  "files.exclude": {
+    "**/dist/**": true
+  }
+}
+
