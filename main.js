@@ -78,6 +78,41 @@ function initDb() {
       created_at TEXT NOT NULL
     );
   `);
+
+  // Seed initial sample project & tasks if the database is empty
+  const count = db.prepare('SELECT COUNT(*) AS count FROM projects').get().count;
+  if (count === 0) {
+    const today = new Date().toISOString().slice(0, 10);
+    const inTwoWeeks = new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10);
+    const inThreeDays = new Date(Date.now() + 3 * 86400000).toISOString().slice(0, 10);
+    const now = new Date().toISOString();
+
+    const insertProject = db.prepare(`
+      INSERT INTO projects (id, name, description, status, priority, start_date, due_date, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const insertTask = db.prepare(`
+      INSERT INTO tasks (id, project_id, title, done, priority, due_date, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const projId = 'proj-welcome';
+    insertProject.run(
+      projId,
+      '🚀 Welcome to Egobas',
+      'Sample project to help you explore features and timelines.',
+      'active',
+      'high',
+      today,
+      inTwoWeeks,
+      now
+    );
+
+    insertTask.run('task-1', projId, 'Click the checkbox to mark this task complete', 1, 'high', today, now);
+    insertTask.run('task-2', projId, 'Switch to "Timeline" view in the top header to see Gantt bars', 0, 'medium', inThreeDays, now);
+    insertTask.run('task-3', projId, 'Click the ＋ button in the sidebar to create a new project', 0, 'low', inTwoWeeks, now);
+  }
 }
 
 /* ----------------------------- IPC Handlers ------------------------------ */
